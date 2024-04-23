@@ -2,6 +2,7 @@ theme: just-the-docs
 
 title: My Lecture Notes
 description: A collection of lecture notes on various topics.
+baseurl: "/beyond-normal-distributions-lecture-notes"
 
 # Theme settings
 just_the_docs:
