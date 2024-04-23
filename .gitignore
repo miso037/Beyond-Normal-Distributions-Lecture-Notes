@@ -1,0 +1,13 @@
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+Gemfile.lock
+# If using Bundler to manage gems
+.bundle/
+
+# Environment variables and configuration files that contain sensitive information
+.env
+
+# Files that contain your local Jekyll configuration
+.jekyll-cache/

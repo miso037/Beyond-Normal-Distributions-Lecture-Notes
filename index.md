@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Home
-permalink: /start/
+title: Lecture Notes on Beyond Normal Distributions
+nav_order: 2
 ---
 
 # Welcome to the Start Page

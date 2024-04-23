@@ -1,0 +1,11 @@
+theme: just-the-docs
+
+title: My Lecture Notes
+description: A collection of lecture notes on various topics.
+
+# Theme settings
+just_the_docs:
+  search_enabled: true
+  aux_links:
+    "Source Code":
+      - "//github.com/username/repo"
