@@ -1,6 +1,6 @@
 ---
-layout: page
-title: "Start Page"
+layout: default
+title: Home
 permalink: /start/
 ---
 
