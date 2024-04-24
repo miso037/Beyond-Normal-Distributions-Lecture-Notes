@@ -10,6 +10,6 @@ This is a starter page to show how to convert Markdown to a static HTML page usi
 
 ## Instructions
 
-
+$$x+1 = 2 $$
 
 Enjoy your new Jekyll page!
