@@ -12,8 +12,10 @@ This is a starter page to show how to convert Markdown to a static HTML page usi
 
 $$x+1 = 2 $$
 
-$$
-e^{i\pi} + 1 = 0
-$$
+$$e^{i\pi} + 1 = 0$$
 
+
+$pls_work = 1+3$
+
+New lines ..
 Enjoy your new Jekyll page!
