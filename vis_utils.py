@@ -7,7 +7,7 @@ positions = np.array([1.0, 1.5, 2.0, 2.3])
 cumulative_weights = np.cumsum(weights)
 print(cumulative_weights)
 # Generate random numbers
-random_values = np.array([0.74,0.574,0.877,0.303])
+random_values = np.array([0.21,0.46,0.71,0.96])
 colors = ['blue', 'green', 'red', 'purple']
 # Create the plot
 fig, ax = plt.subplots()

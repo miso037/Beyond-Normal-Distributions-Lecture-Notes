@@ -198,7 +198,28 @@ reflected by the frequency of selection based on the random numbers generated.
 
 ### Stochastic universal resampling
 
-(TODO)
+The Stochastic universal resampling starts similarly to multinomial resampling by computing cumulative sum of the normalized weights.
+After that, the interval from $\[0, 1\]$ is split into $N$ equal segments and a random number $s$ is generated in range $\[0, \frac{1}{N}\]$.
+After that, $N$ numbers $t_i = s + i \cdot \frac{1}{N}$ are generated for $i \in [0,\dots,N-1]$. For each $i$, new particle will be resampled based on
+the current index. The index starts at $1$ and it is increment by $1$ whenever $t_i > c_{\text{index}}$, where $c$ denotes the cumulative
+sum array. The index is incremented till $t_i < c_{\text{index}}$. We will again visualize this resampling alghorithm by an example. 
+
+We have four particles with weights $\\{0.1, 0.2, 0.1, 0.6\\}$ and positions $\\{1.0, 1.5, 2.0, 2.3\\}$. The cumulative sum is 
+$c = \\{0.1,0.3,0.4,1.0\\}$. We generate random number $s = 0.02$ from interval $\[0, \frac{1}{N}\] = \[0, \frac{1}{4}\]$, leading to points 
+$t_i = \\{0.02,0.27,0.52,0.77\\}$. Number $t_1 = 0.02$ is lower than $c_1 = 0.1$ therefore the index stays at $1$. The first generated particle 
+is on position $x = 1.0$, corresponding to the first weight and first value $c_1$ in the cumulative sum. Number $t_2 = 0.27$ is again higher 
+$c_1 = 0.1$, and lower than $c_3 = 0.4$, therefore the index is increased to $2$. The second generated particle is on position $x = 1.5$, corresponding 
+to the second weight. The $t_3 = 0.52 > c_2 = 0.3$ and also $t_3 = 0.52 > c_3 = 0.4$,therefore the index is increased to $4$. 
+The third and fourth particle is generated at position $x = 2.3$, corresponding to the fourth weight.  Simillarly, to multinomial resampling
+all new particles share the same weight $w = 0.25 = \frac{1}{N}$.
+
+(I think this part should be somehow rewritten, the explanation is somewhat janky.)
+
+### Comparison
+
+Multinomial resampling tends to exhibit higher variance among resampled particles and operates with a time complexity of $\mathcal{O}(N \cdot \log N)$. 
+In contrast, Stochastic Universal Resampling (SUR) is a preferable alternative due to its linear time complexity of $\mathcal{O}(N)$ and reduced 
+variance in the resampled particles. This makes SUR both faster and more statistically efficient.
 
 ## Where does it break
 
