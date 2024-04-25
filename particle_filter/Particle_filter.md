@@ -16,13 +16,21 @@ The measurement probability $p(z \mid x_t)$ quantifies how likely it is to obser
 
 Let's explore how this algorithm works with a practical example. Imagine a red blob in a simple 1D world where it can only move along the x-axis in a positive direction. The blob is somewhere in the environment shown below, but it doesn't know its exact location. However, it can estimate its movement from one position to another through the transitional probability $p(x_t \mid x_{t−1},u_{t−1})$ and, interestingly, it has the ability to detect when a door is directly in front of it, using $p(z \mid x_t)$. Let's help the blob localize itself in this known environment!
 
-(TODO INSERT BLOB IMAGE)
+<p align="center">
+    <img src="Blob.png" alt="Particle filter localization animation." />
+    Blob in the enviroment.
+</p>
+
 
 ### 1. Initialize particles
 
 Since the blob has no idea where it is, and neither do we, the algorithm starts by initializing particles to represent potential positions. Given no prior information about the blob’s initial state $p(x_0)$, we will distribute $N$ particles $\mathcal{L} = \\{ x_0^1, \dots, x_0^N \\}$ uniformly across the entire room to positions $x_0^i$, assigning each particle an equal weight of $\frac{1}{N}$​ (i for each particle). This approach reflects our complete uncertainty about the blob’s location. Utilizing a higher number of particles can provide a more precise estimation of $p(x)$, but this comes at the cost of increased computational and memory demands. 
 
-(TODO INITIALIZATION IMG)
+<p align="center">
+    <img src="Initialization.png" alt="Particle filter localization animation." />
+    Our initial hypothesis of blob state, uniformly distributed over the whole enviroment.
+</p>
+
 
 ### 2. Prediction step: Blob Moved !
 
@@ -32,7 +40,10 @@ $$p(x_t^i \mid x_{t−1}^i,u_{t−1}^i) = \mathcal{N}(x_{t-1}^i + u_{t-1}, \sigm
 
 We then adjust each particle's position by sampling from $\mathcal{N}(x_{t-1}^i + u_{t-1}, \sigma^2)$, updating their estimated positions based on the blob's reported movement.
 
-(TODO weights IMG)
+<p align="center">
+    <img src="Predict_step.png" alt="Particle filter localization animation." />
+    Prediction of blob movement in red.
+</p>
 
 ### 3. Measurement update: Blob smells the doors !
 
@@ -44,16 +55,29 @@ Additionally, the weights of all particles are normalized so that they sum up to
 
 $$ w^i_{\text{norm}} = \frac{w^i}{\sum_{j=1}^N w^j}$$
 
+<p align="center">
+    <img src="Measurement_step.png" alt="Particle filter localization animation." />
+    Blob detected doors at this moment, evident from the probability $p(z_t = 1 \mid x_t)$. Particles are adjusted based on this detection, with their weights reflecting the likelihood of each particle's state. Our belief about the system’s state, $bel(x)$, is then updated by integrating the weights and positions of these particles. The process of $bel(x)$ reconstruction will be explained later.
+</p>
+
 ### 4. Particle resampling.
 
 As the particle filter gains more information, maintaining a uniform distribution of particles across the entire map becomes inefficient. To optimize our estimation of $p(x)$, the resampling process comes into play. This process systematically eliminates particles with very low weights, which represent less likely positions, and duplicates particles with very high weights, which represent more likely positions. This adjustment not only focuses the computational effort on more probable states but also ensures that the density of particles is greater in areas of higher likelihood. We will deal with detailed explanation of resampling process later.
 
+<p align="center">
+    <img src="Resampling.png" alt="Particle filter localization animation." />
+    Particles are resampled around positions with the highest probability. Do not be fooled by the image, the number of particles is still $N$, some of them just share the same robot state.
+</p>
+
+### 5. Go back to step 2
+
+The particle filter algorithm cycles through prediction, measurement, and resampling steps over time. Now, let's watch the following animation to see how Blob localizes itself in the environment.
 
 
-
-## Lets see it working
-
-(TODO EXPLAIN ANIMATION)
+<p align="center">
+    <img src="Blob_loc.gif" alt="Particle filter localization animation." />
+    This animation shows 8 whole iterations of particle filter. (Should i explain the process more ?)
+</p>
 
 
 ## Why does it work (I think this is maybe too much)
@@ -94,18 +118,22 @@ To resample, a random number is generated within the range of 0 to 1. The new pa
 
 Let’s visualize the resampling process with an example. Suppose we have four particles with weights $\\{0.1, 0.2, 0.1, 0.6\\}$ and positions $\\{1.0, 1.5, 2.0, 2.3\\}$. First, we compute the cumulative sum of the normalized weights, resulting in an array of cumulative values. 
 
-Imagine we visually represent these cumulative weights as sections of a line segment ranging from 0 to 1, where each segment's length corresponds to a particle's weight. The cumulative sum for our weights would split the segment into intervals: . Each interval correlates to the respective particle’s position. These values can be envisioned as the boundaries of intervals along a 0 to 1 scale: $\[0, 0.1\]$, $\(0.1, 0.3\]$, $\(0.3, 0.4\]$, and $\(0.4, 1.0\]$.
+Imagine we visually represent these cumulative weights as sections of a line segment ranging from 0 to 1, where each segment's length corresponds to a particle's weight. The cumulative sum for our weights would split the segment into intervals: . Each interval correlates to the respective particle’s position.
 
 <p align="center">
     <img src="Cumsum.png" alt="Cumsum intervals" />
 </p>
 
+Next, we generate four random numbers within the range of 0 to 1: $\\{0.74, 0.574, 0.877, 0.303\\}$. Each number determines the selection of a new particle based on the interval it falls into:
 
-$$w = \frac{p(x)}{bel(x)}$$
+- 0.74, 0.574, and 0.877 fall into the interval $\(0.4, 1.0\]$, corresponding to the position 2.3.
+- 0.303 falls into the interval $\(0.3, 0.4\]$, corresponding to the position 2.0.
 
-(TODO VISUALIZATION IF NOT TOO MUCH)
+<p align="center">
+    <img src="Resampled_multinominal.png" alt="Cumsum intervals" />
+</p>
 
-But how do we know that weights are proportional to the ration between $p(x)$ to $bel(x)$ ? The answer lies in our measurement model. This model assignts higher weights to the particles, or hypothesis that align with our knowledge of the map. You can think of it as even though we generated possible robot positions from arbitrary probability distribution, our measurement model (absolute marker detections ...) assigns higher weights to the particles that correspond more closely to the unkown $p(x)$.
+Consequently, we end up with new particles at positions $\\{2.3, 2.3, 2.3, 2.0\\}$ with weights equal to $w^i = \frac{1}{N} = 0.25$. These new particles indicate a higher likelihood of the robot being at position 2.3, as reflected by the frequency of selection based on the random numbers generated.
 
 
 ### Stochastic universal resampling
@@ -117,4 +145,6 @@ But how do we know that weights are proportional to the ration between $p(x)$ to
 
 ## Where does it break
 
-(TODO)
+(TODO) 
+
+Should include slide about N = 40,2,5,1000.
