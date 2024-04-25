@@ -12,7 +12,7 @@ probability distribution $p(x)$ using a set of particles, and updates these part
 steps based on new data.
 
 The transition probability $p(x_t \mid x_{t−1},u_{t−1})$ describes the likelihood of the robot transitioning from one 
-state $x_{t−1}$​ to another $x_t$​ given a particular action $u\_{t−1}​. This could be modeled using odometry data, 
+state $x_{t−1}$​ to another $x_t$​ given a particular action $u\_{t−1}$​. This could be modeled using odometry data, 
 which might, for example, be assumed Gaussian with a known standard deviation, reflecting the inherent uncertainty in 
 the robot's movement.
 
@@ -25,7 +25,7 @@ modeled by a probability distribution, accounting for possible errors in sensor 
 Let's explore how this algorithm works with a practical example. Imagine a red blob in a simple 1D world where it can 
 only move along the x-axis in a positive direction. The blob is somewhere in the environment shown below, but it 
 doesn't know its exact location. However, it can estimate its movement from one position to another through the 
-transitional probability $p(x_t \mid x_{t−1},u_{t−1})$ and, interestingly, it has the ability to detect when a door is 
+transitional probability $p(x_t \mid x_{t−1},u_{t−1})$ and, it has the ability to detect when a door is 
 directly in front of it, using $p(z \mid x_t)$. Let's help the blob localize itself in this known environment!
 
 <p align="center">
@@ -44,7 +44,7 @@ but this comes at the cost of increased computational and memory demands.
 
 <p align="center">
     <img src="Initialization.png" alt="Particle filter localization animation." />
-    Our initial hypothesis of blob state, uniformly distributed over the whole enviroment.
+    Our initial hypothesis of the blob state, uniformly distributed over the whole enviroment.
 </p>
 
 ### 2. Prediction step: Blob Moved !
@@ -61,18 +61,18 @@ estimated positions based on the blob's reported movement.
 
 <p align="center">
     <img src="Predict_step.png" alt="Particle filter localization animation." />
-    Prediction of blob movement in red.
+    Prediction of the blob movement in red.
 </p>
 
 ### 3. Measurement update: Blob smells the doors !
 
-Blob can tell us if he smells the doors or not. This gives us information about current state of the blob, since the 
+Blob can tell us if he smells the doors or not. This gives us information about the current state of the blob, since the 
 enviroment is known. In this step, we adjust the weights $w_t^i$ of the particles based on the measurement probability 
 $w_t^i = p(z_t \mid x_t^i)$. This probability reflects how likely each particle's estimated position aligns with the 
 blob's sensory input.
 
 In our scenario, if the blob smells the doors, the weights for particles that are close to the known door positions are 
-increased, reflecting a higher likelihood that these particles represent the blob's actual position. Conversely, if the 
+increased, reflecting a higher likelihood that these particles represent the blob's actual position. If the 
 blob does not smell the doors, we increase the weights of particles that are farther from the doors. This proportional 
 adjustment ensures that each particle's weight corresponds to the plausibility of the sensory data given the particle's 
 estimated location.
@@ -86,7 +86,7 @@ $$ w^i*{\text{norm}} = \frac{w^i}{\sum*{j=1}^N w^j}$$
     <img src="Measurement_step.png" alt="Particle filter localization animation." />
     Blob detected doors at this moment, evident from the probability $p(z_t = 1 \mid x_t)$. Particles are adjusted 
     based on this detection, with their weights reflecting the likelihood of each particle's state. Our belief about 
-    the system’s state, $bel(x)$, is then updated by integrating the weights and positions of these particles. The 
+    the system’s state $bel(x)$, is then updated by integrating the weights and positions of these particles. The 
     process of $bel(x)$ reconstruction will be explained later.
 </p>
 
@@ -95,7 +95,7 @@ $$ w^i*{\text{norm}} = \frac{w^i}{\sum*{j=1}^N w^j}$$
 As the particle filter gains more information, maintaining a uniform distribution of particles across the entire map 
 becomes inefficient. To optimize our estimation of $p(x)$, the resampling process comes into play. This process 
 systematically eliminates particles with very low weights, which represent less likely positions, and duplicates 
-particles with very high weights, which represent more likely positions. This adjustment not only focuses the 
+particles with very high weights. This adjustment not only focuses the 
 computational effort on more probable states but also ensures that the density of particles is greater in areas of 
 higher likelihood. We will deal with detailed explanation of resampling process later.
 
@@ -118,11 +118,11 @@ the following animation to see how Blob localizes itself in the environment.
 ## Why does it work (I think this is maybe too much)
 
 As previously mentioned, each particle in the filter represents a hypothesis about the robot's state within the 
-probability distribution p(x)p(x). Our belief about the robot's state, denoted as bel(x)bel(x), can be intuitively 
-inferred by integrating over the particles. Regions where particles are more densely aggregated correspond to 
+probability distribution $p(x)$. Our belief about the robot's state, denoted as $bel(x)$, can be reconstructed by 
+integrating over the particles. Regions where particles are more densely aggregated correspond to 
 higher probability areas in our belief of the robot's state.
 
-Another perspective on this density is to view each particle's weight as an estimate of probability. The greater the 
+Another perspective on probability density is to view each particle's weight as an estimate of probability. The greater the 
 weight of a particle, the greater the confidence in that particle's state hypothesis, and hence, the higher the 
 probability that the robot is in that state according to our belief. As we assigned weights to our particles we will 
 use the density approach.
@@ -167,17 +167,16 @@ in an array of values ranging from 0 to 1, with each subsequent value being grea
 
 To resample, a random number is generated within the range of 0 to 1. The new particle is then selected based on the 
 interval into which this random number falls. Each interval corresponds to a particle, and the size of the interval is 
-proportional to the particle's normalized weight—larger intervals correspond to particles with higher weights, thus 
+proportional to the particle's normalized weight. Larger intervals correspond to particles with higher weights, thus 
 increasing their likelihood of selection.
 
 Let’s visualize the resampling process with an example. Suppose we have four particles with weights 
 $\\{0.1, 0.2, 0.1, 0.6\\}$ and positions $\\{1.0, 1.5, 2.0, 2.3\\}$. First, we compute the cumulative sum of the 
 normalized weights, resulting in an array of cumulative values.
 
-Imagine we visually represent these cumulative weights as sections of a line segment ranging from 0 to 1, where each 
-segment's length corresponds to a particle's weight. The cumulative sum for our weights would split the segment into intervals: 
-$\[0, 0.1\]$, $\(0.1, 0.3\]$, $\(0.3, 0.4\]$, and $\(0.4, 1.0\]$. Each interval correlates to the respective particle’s
-position.
+We can visually represent these cumulative weights as sections of a line segment ranging from 0 to 1. The cumulative sum 
+for our weights would split the segment into intervals: $\[0, 0.1\]$, $\(0.1, 0.3\]$, $\(0.3, 0.4\]$, and $\(0.4, 1.0\]$. 
+Each interval represents certain particle.
 
 <p align="center">
     <img src="Cumsum.png" alt="Cumsum intervals" />
@@ -193,7 +192,7 @@ determines the selection of a new particle based on the interval it falls into:
     <img src="Resampled_multinominal.png" alt="Cumsum intervals" />
 </p>
 
-Consequently, we end up with new particles at positions $\\{2.3, 2.3, 2.3, 2.0\\}$ with weights equal to 
+In the end, we end up with new particles at positions $\\{2.3, 2.3, 2.3, 2.0\\}$ with weights equal to 
 $w^i = \frac{1}{N} = 0.25$. These new particles indicate a higher likelihood of the robot being at position 2.3, as 
 reflected by the frequency of selection based on the random numbers generated.
 
@@ -205,4 +204,5 @@ reflected by the frequency of selection based on the random numbers generated.
 
 (TODO)
 
-Should include slide about N = 40,2,5,1000.
+I plan include slide about N = 40,2,5,1000. (difference between initialization and particle density, respectively how much particles are used)
+
