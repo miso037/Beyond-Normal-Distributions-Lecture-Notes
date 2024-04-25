@@ -12,7 +12,7 @@ probability distribution $p(x)$ using a set of particles, and updates these part
 steps based on new data.
 
 The transition probability $p(x_t \mid x_{t−1},u_{t−1})$ describes the likelihood of the robot transitioning from one 
-state $x_{t−1}$​ to another $x_t$​ given a particular action $u\_{t−1}$​. This could be modeled using odometry data, 
+state $x_{t−1}$​ to another $x_t$​ given a particular action $u_{t−1}$​. This could be modeled using odometry data, 
 which might, for example, be assumed Gaussian with a known standard deviation, reflecting the inherent uncertainty in 
 the robot's movement.
 
@@ -80,7 +80,7 @@ estimated location.
 Additionally, the weights of all particles are normalized so that they sum up to 1, ensuring that the weights represent 
 a valid probability distribution over the particle set.
 
-$$ w^i*{\text{norm}} = \frac{w^i}{\sum*{j=1}^N w^j}$$
+$$ w^i_{\text{norm}} = \frac{w^i}{\sum_{i=1}^N w^j}$$
 
 <p align="center">
     <img src="Measurement_step.png" alt="Particle filter localization animation." />
