@@ -16,6 +16,13 @@ In this section we will compare all four localization methods, Bayes filter, par
 
 The particle filter and Bayes filter allow us to maintain multiple high-probability hypotheses about the current state of a robot. Consider the example of the kidnapped robot problem, where our door sensor detects doors at three different locations. Both the particle filter and the Bayes filter can represent this information as three distinct, highly probable hypotheses regarding the current state of the robot. In contrast, such measurements are impossible to represent with a Gaussian distribution, which means that a multimodal hypothesis cannot be represented with a Kalman filter. The factograph approach also allows us to represent various multimodal hypotheses. However, optimizing factographs may not be feasible, or could even be impossible, with arbitrary probability distributions.
 
+<p align="center">
+    <img src="NonGaussProb.png" width="500"/>
+    <p align="center">
+    Example of probability distribution that cannot be represented as gaussian.
+    </p>
+</p>
+
 ## Linear vs non-linear models
 
 The Kalman filter alone struggles with non-linear robot models and measurements. The Extended Kalman Filter addresses this issue by linearizing around the current state's operational point. However, this approximation is sensitive and may not be suitable for highly non-linear models. In contrast, the Bayes filter, factograph and the particle filter are capable of handling non-linear models as effectively as linear ones.

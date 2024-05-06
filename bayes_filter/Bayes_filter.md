@@ -71,6 +71,12 @@ To predict the prior belief $\overline{bel}(x_1)$ after an action $u_1$​ has b
 
 $$ \overline{bel}(x_t) = \sum_{x_{t-1}} p( x_t \mid x_{t-1}, u_t) \cdot bel(x_{t-1}) $$
 
+<p align="center">
+    <img src="Prediction_step.png"  />
+    Example of prediction step computation.
+</p>
+
+
 ### 3. Update step
 
 The update step incorporates measurement into our belief estimation. Imagine we have two robot detectors at position $0$ and position $2$. We can represent the measurement probability as
@@ -78,6 +84,10 @@ $p(z_t = 0 \mid x_1) = p(z_t = 2 \mid x_1) = 0.5$. We can compute posterior $bel
 belief $bel(x_t)$ must be additionally normalized by $\eta$ in order to represent probability distribution. We can write this mathematically as
 
 $$ bel(x_t) = \eta \cdot p(z_t \mid x_t) \cdot \overline{bel}(x_t). $$ 
+
+<p align="center">
+    <img src="Update_step.gif"  />
+</p>
 
 Let us remind that the prior $\overline{bel}(x_t)$ is computed by incorporation state-transitional probability $p(x_t \mid x_{t-1}, u_{t})$ and the posterior belief $bel(x_t)$ is computed by incorporating
 measurement probability $p(x_t \mid x_{t-1}, u_{t})$.
@@ -90,6 +100,9 @@ $$bel(x_t) = p(x_t \mid z_{1:t}, u_{1:t}) \dots \text{ posterior belief}$$
 
 In this example, we will track the position of our little friend, the red blob. The red blob begins its movement at position $5$. It declares that it will move one position to the right in each iteration. However, due to the inherent uncertainties in its reporting (after all, it is only a blob), we approach this movement information with caution. We represent it using the state-transitional probability $p(x_t \mid x_{t-1}, u_{t})$. The evolution of our belief over time can be observed in the following animation.
 
+<p align="center">
+    <img src="Example1.gif" width="500"  />
+</p>
 
 ## Example 2: Blob can detect the doors !
 
@@ -97,8 +110,11 @@ In this scenario, the blob has informed us that it can detect when it is standin
 
 We can model this situation using the measurement probability $p(z_t \mid x_t)$. We know that in the room where the blob is currently located, the doors are at position 7. The blob continues to move only to the right. The measurement probability is showcased on the following two images.
 
-
 We believe that blob is currently at the position $3$, but is it really the case ? Let's observe blob localization in the following animation.
+
+<p align="center">
+    <img src="Example2.gif" width="500"  />
+</p>
 
 
 ## Example 3: Where is blob ?
@@ -106,9 +122,16 @@ We believe that blob is currently at the position $3$, but is it really the case
 In this scenario, we have no idea where the blob is. We however, know that he is in already known enviroment with 3 doors. Blob again promised us he will move only to the right.
 This scenario corresponds to the Kidnapped robot problem, where our goal is to localize a robot in already known enviroment with no prior information about robot state.
 
+<p align="center">
+    <img src="Example3.gif" width="500"  />
+</p>
 
 ## Recapitulation
 
 The Discrete Bayes Filter discretizes the state space, assigning a probability to each state. These probabilities are represented by our belief $bel(xt)$. The algorithm incorporates state-transition probabilities $p(x_t \mid x_{t-1}, u_{t})$ and measurement probabilities $p(z_t \mid x_t)$ in a recurrent fashion, in order to estimate the belief about the robot's state. To simplify this estimation, the Markov assumption of a complete state is used. This enables us to represent belief estimation as follows.
+
+<p align="center">
+    <img src="FactorGraph.png" width="500"  />
+</p>
 
 One advantage of the Discrete Bayes Filter is that it can represent arbitrary probability distributions. In contrast, the Kalman Filter and the Extended Kalman Filter represent beliefs using linear Gaussian models. The Bayes Filter also enables us to solve the kidnapped robot problem, as it is multimodal. It can represent multiple high-probability hypotheses, for example, two possible positions in the environment. This cannot be done with a Kalman Filter. However, the Discrete Bayes Filter suffers from the curse of dimensionality. Imagine a scenario where we want to estimate a robot's position in a 100x100 meter square. We could approximate this with 10,000 bins. Now, let's add velocity estimation to each state, where the robot can move from -1 to +1 meter per second. We will discretize this into 20 values, spaced 0.1 meter per second. Now, the state space is 200,000 bins large. As you can see, the amount of memory needed explodes exponentially.

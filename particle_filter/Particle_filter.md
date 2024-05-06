@@ -115,7 +115,7 @@ the following animation to see how Blob localizes itself in the environment.
     This animation shows 8 whole iterations of particle filter. (Should i explain the process more ?)
 </p>
 
-## Why does it work (I think this is maybe too much)
+## Why does it work ?
 
 As previously mentioned, each particle in the filter represents a hypothesis about the robot's state within the 
 probability distribution $p(x)$. Our belief about the robot's state, denoted as $bel(x)$, can be reconstructed by 
@@ -126,8 +126,6 @@ Another perspective on probability density is to view each particle's weight as 
 weight of a particle, the greater the confidence in that particle's state hypothesis, and hence, the higher the 
 probability that the robot is in that state according to our belief. As we assigned weights to our particles we will 
 use the density approach.
-
-(TODO IMAGE NUM OF SAMPLES AND WEIGHTED SAMPLES)
 
 We have a set of weighted samples, particles given as:
 
@@ -145,8 +143,6 @@ the samples from $bel(x)$ with weights proportional to the ratio of $p(x)$ to $b
 the true probability distribution $p(x)$.
 
 $$w = \frac{p(x)}{bel(x)}$$
-
-(TODO VISUALIZATION IF NOT TOO MUCH)
 
 But how do we know that weights are proportional to the ratio between $p(x)$ and $bel(x)$? The answer lies in our 
 measurement model. This model assigns higher weights to the particles, or hypotheses, that align with our knowledge of 
@@ -221,9 +217,16 @@ Multinomial resampling tends to exhibit higher variance among resampled particle
 In contrast, Stochastic Universal Resampling (SUR) is a preferable alternative due to its linear time complexity of $\mathcal{O}(N)$ and reduced 
 variance in the resampled particles. This makes SUR both faster and more statistically efficient.
 
-## Where does it break
+## Where does it break ? 
 
-(TODO)
+The particle filter algorithm relies on generating some particles close to the actual state of the robot. If no particles are generated near the true robot state, the algorithm may converge to an incorrect estimation of the robot's state $p(x)$. Resampling makes this issue even worse, by potentially increasing the number of particles near an incorrect hypothesis, especially if measurements mistakenly assign higher weights to these particles. Therefore, it's important to have enough particles near the real location of the robot to keep the algorithm working correctly.
 
-I plan include slide about N = 40,2,5,1000. (difference between initialization and particle density, respectively how much particles are used)
+<p align="center">
+    <img src="LowSampling.gif" alt="Particle filter localization animation." />
+    <p align="center">
+    This example shows six different instances of particle filter alghorithm. You can observe that one instance with 5 particles converged
+    on the wrong robot position.
+    </p>
+</p>
+
 
