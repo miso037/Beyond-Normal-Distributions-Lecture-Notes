@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Bayes Filter
-nav_order: 1
+nav_order: 2
 ---
 
 # Discrete Bayes Filter
