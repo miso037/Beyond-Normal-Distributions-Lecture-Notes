@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Comparison of methods Advantages and Disadvantages
-nav_order: 1
+nav_order: 4
 ---
 
 # Comparison of methods Advantages and Disadvantages

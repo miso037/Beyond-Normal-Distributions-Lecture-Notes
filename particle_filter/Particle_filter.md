@@ -229,4 +229,7 @@ The particle filter algorithm relies on generating some particles close to the a
     </p>
 </p>
 
+## Additional materials
 
+This [video](https://www.youtube.com/watch?v=NrzmH_yerBU) explains the particle filter itself. We are highly reccomending watching it, if you are still little confused about what exactly is measurement probability.
+This [jupyter notebook](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/blob/master/12-Particle-Filters.ipynb) explains particle fitler with code python code snippets, which may help you understand the topic better. Lastly, if you are interested in more theory behind particle filter, you can check out the [Probabilistic Robotics](https://docs.ufpr.br/~danielsantos/ProbabilisticRobotics.pdf) book.

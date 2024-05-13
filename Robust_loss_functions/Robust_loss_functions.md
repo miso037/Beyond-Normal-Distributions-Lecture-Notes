@@ -34,7 +34,7 @@ These functions are designed to mitigate the impact of outliers on the overall p
     <img src="Robust_loss_types.png"/>
     <p align="center">
     Different examples of robust loss functions. The shape of the loss function is determined by the parameter $\alpha$. For $\alpha = 2$ we get classic L2 norm and for $\alpha = \infty$ we get Welsch loss
-    which corresponds to the heavy-trailed gaussian loss.
+    which corresponds to the heavy-trailed gaussian loss. Courtesy of  [A General and Adaptive Robust Loss Function](https://arxiv.org/abs/1701.03077).
     </p>
 </p>
 

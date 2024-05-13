@@ -135,3 +135,9 @@ The Discrete Bayes Filter discretizes the state space, assigning a probability t
 </p>
 
 One advantage of the Discrete Bayes Filter is that it can represent arbitrary probability distributions. In contrast, the Kalman Filter and the Extended Kalman Filter represent beliefs using linear Gaussian models. The Bayes Filter also enables us to solve the kidnapped robot problem, as it is multimodal. It can represent multiple high-probability hypotheses, for example, two possible positions in the environment. This cannot be done with a Kalman Filter. However, the Discrete Bayes Filter suffers from the curse of dimensionality. Imagine a scenario where we want to estimate a robot's position in a 100x100 meter square. We could approximate this with 10,000 bins. Now, let's add velocity estimation to each state, where the robot can move from -1 to +1 meter per second. We will discretize this into 20 values, spaced 0.1 meter per second. Now, the state space is 200,000 bins large. As you can see, the amount of memory needed explodes exponentially.
+
+
+
+## Additional materials
+
+This [jupyter notebook](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/blob/master/02-Discrete-Bayes.ipynb) explains Discrete Bayes Filter with code python code snippets, which may help you understand the topic better. Lastly, if you are interested in more theory behind Discrete Bayes Filter, you can check out the [Probabilistic Robotics](https://docs.ufpr.br/~danielsantos/ProbabilisticRobotics.pdf) book.
