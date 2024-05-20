@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'jekyll', '4.3.3'
-gem 'just-the-docs'
+gem 'just-the-docs', '~> 0.3.0'
 gem 'csv'
 gem 'base64'
 gem 'bigdecimal'
