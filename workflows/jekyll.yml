@@ -1,36 +1,33 @@
-name: Jekyll Build and Deploy
+name: Build and Deploy Jekyll Site
 
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7
+          ruby-version: 'latest'
 
-      - name: Install Jekyll and dependencies
+      - name: Install dependencies
         run: |
-          gem install jekyll bundler
+          gem install bundler
           bundle install
 
-      - name: Build site
-        run: bundle exec jekyll build
+      - name: Build Jekyll site
+        run: bundle exec jekyll build -d public
 
       - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/master'
-        run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@github.com'
-          git add .
-          git commit -m "Deploy site"
-          git push origin master
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
