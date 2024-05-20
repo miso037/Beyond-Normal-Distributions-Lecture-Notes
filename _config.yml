@@ -9,4 +9,5 @@ just_the_docs:
   search_enabled: true
   aux_links:
     "Source Code":
-      - https://github.com/username/beyond-normal-distributions-lecture-notes
+      - https://github.com/miso037/beyond-normal-distributions-lecture-notes
+
