@@ -9,4 +9,4 @@ just_the_docs:
   search_enabled: true
   aux_links:
     "Source Code":
-      - https://gitlab.fel.cvut.cz/kasarmic/beyond-normal-distributions-lecture-notes
+      - https://github.com/username/beyond-normal-distributions-lecture-notes
